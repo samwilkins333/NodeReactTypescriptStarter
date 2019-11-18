@@ -6,9 +6,10 @@ export default class MainView extends React.Component<{}> {
 
     render() {
         return (
-            <div className={"welcome"}>
+            <div
+                className={"welcome"}
+                style={{ background: "url('/images/wooden_background.jpg')" }}>
                 <span>Hey there! Feel free to change me: I'm in main_view.tsx...</span>
-                <img src={"/images/wooden_background.jpg"}/>
             </div>
         );
     }
