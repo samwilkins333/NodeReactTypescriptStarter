@@ -5,7 +5,7 @@ const public = resolve(__dirname, "src/server/public");
 module.exports = {
     mode: 'production',
     entry: {
-        bundle: "./src/client/main.tsx"
+        bundle: "./src/client/index.tsx"
     },
     devtool: "source-map",
     output: {
