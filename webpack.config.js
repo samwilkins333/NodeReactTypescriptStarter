@@ -1,6 +1,6 @@
 const { resolve } = require("path");
 const Copy = require('copy-webpack-plugin');
-const public = resolve(__dirname, "src/server/public");
+const public = resolve(__dirname, "static");
 
 module.exports = {
     mode: 'production',
@@ -18,7 +18,7 @@ module.exports = {
     },
     plugins: [
         new Copy([
-            { from: resolve(__dirname, "assets") , to: public }
+            { from: resolve(__dirname, "src/assets") , to: public }
         ])
     ],
     module: {

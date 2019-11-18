@@ -22,8 +22,8 @@ export default class MainView extends React.Component<MainViewProps> {
                 <img
                     className={"logo"}
                     src={"/images/logo.png"}
-                    onClick={action(() => this.counter++)}
                     style={{ animation: `spin ${8 - (this.counter % 8)}s linear infinite` }}
+                    onClick={action(() => this.counter++)}
                 />
                 <span className={"welcome"}>Hey there! Click the logo to change its rotational speed...</span>
             </div>

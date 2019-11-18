@@ -1,17 +1,20 @@
 import * as express from "express";
-import { join } from "path";
+import { resolve } from "path";
 
 const port = 1050;
-const content_path = "../../build/index.html";
+
+const static_path = resolve(__dirname, "../../static");
+const content_path = resolve(__dirname, "../../src/index.html");
+
 const server = express();
 
-server.use(express.static(__dirname + "/public"));
+server.use(express.static(static_path));
 
 console.log(`Server listening on port ${port}...`);
 
 server.get("/", (_req, res) => res.redirect("/logo"));
 server.get("/logo", (_req, res) => {
-    res.sendFile(join(__dirname, content_path));
+    res.sendFile(content_path);
 });
 
 server.listen(port);
