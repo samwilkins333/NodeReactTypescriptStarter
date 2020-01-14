@@ -1,5 +1,6 @@
 import * as express from "express";
 import { resolve } from "path";
+import * as bodyParser from "body-parser";
 
 const port = 1050;
 
@@ -8,13 +9,14 @@ const content_path = resolve(__dirname, "../../src/index.html");
 
 const server = express();
 
+server.use(bodyParser.json({ limit: "10mb" }));
+server.use(bodyParser.urlencoded({ extended: true }));
 server.use(express.static(static_path));
 
 console.log(`Server listening on port ${port}...`);
 
+server.get("/backgroundColor", (_req, res) => res.send({ backgroundColor: "#F00" }));
 server.get("/", (_req, res) => res.redirect("/logo"));
-server.get("/logo", (_req, res) => {
-    res.sendFile(content_path);
-});
+server.get("/logo", (_req, res) => res.sendFile(content_path));
 
 server.listen(port);
