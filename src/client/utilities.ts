@@ -1,5 +1,7 @@
 import * as request from "request-promise";
 
+const { origin } = window.location;
+
 export namespace Utilities {
 
     export function url(target: string) {
@@ -7,12 +9,19 @@ export namespace Utilities {
     }
 
     export async function post(relativeRoute: string, body: any) {
-        const parameters: request.OptionsWithUri = {
+        return handleRequest({
             method: "POST",
-            uri: window.location.origin + relativeRoute,
+            uri: origin + relativeRoute,
             json: true,
             body
-        }
+        });
+    }
+
+    export async function get(relativeRoute: string) {
+        return handleRequest({ uri: origin + relativeRoute });
+    }
+
+    async function handleRequest(parameters: request.OptionsWithUri) {
         const response = await request(parameters);
         if (typeof response === "string") {
             try {
@@ -20,14 +29,6 @@ export namespace Utilities {
             } catch {
                 return response;
             }
-        }
-        return response;
-    }
-
-    export async function get(relativeRoute: string) {
-        const response = await request(window.location.origin + relativeRoute);
-        if (typeof response === "string") {
-            return JSON.parse(response);
         }
         return response;
     }
