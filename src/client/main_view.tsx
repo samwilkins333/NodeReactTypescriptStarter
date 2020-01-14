@@ -27,6 +27,7 @@ export default class MainView extends React.Component<MainViewProps> {
 
     componentDidMount() {
         setTimeout(this.requestPreferredBackgroundColor, 3000);
+        Utilities.post("/recordMostRecentClient", { mostRecentClient: new Date().toUTCString() })
     }
 
     render() {

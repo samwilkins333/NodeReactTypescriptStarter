@@ -15,7 +15,11 @@ export namespace Utilities {
         }
         const response = await request(parameters);
         if (typeof response === "string") {
-            return JSON.parse(response);
+            try {
+                return JSON.parse(response);
+            } catch {
+                return response;
+            }
         }
         return response;
     }
