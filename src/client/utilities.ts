@@ -2,13 +2,17 @@ import * as request from "request-promise";
 
 const { origin } = window.location;
 
-export namespace Utilities {
+export function url(target: string) {
+    return `url(images/${target})`;
+}
 
-    export function url(target: string) {
-        return `url(images/${target})`;
-    }
+export function src(target: string) {
+    return `/images/${target}`;
+}
 
-    export async function post(relativeRoute: string, body: any) {
+export namespace Server {
+
+    export async function Post(relativeRoute: string, body: any) {
         return handleRequest({
             method: "POST",
             uri: origin + relativeRoute,
@@ -17,7 +21,7 @@ export namespace Utilities {
         });
     }
 
-    export async function get(relativeRoute: string) {
+    export async function Get(relativeRoute: string) {
         return handleRequest({ uri: origin + relativeRoute });
     }
 
@@ -33,4 +37,4 @@ export namespace Utilities {
         return response;
     }
 
-}
+} 

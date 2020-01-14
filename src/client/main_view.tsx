@@ -3,7 +3,7 @@ import * as React from "react";
 import "./main_view.scss";
 import { observable, action, runInAction } from "mobx";
 import { observer } from "mobx-react";
-import { Utilities } from "./utilities";
+import { Server, src } from "./utilities";
  
 export interface MainViewProps {
     background: string;
@@ -21,13 +21,13 @@ export default class MainView extends React.Component<MainViewProps> {
     }
 
     private requestPreferredBackgroundColor = async () => {
-        const { backgroundColor } = await Utilities.get("/backgroundColor");
+        const { backgroundColor } = await Server.Get("/backgroundColor");
         runInAction(() => this.resolvedBackgroundColor = backgroundColor);
     }
 
     componentDidMount() {
         setTimeout(this.requestPreferredBackgroundColor, 3000);
-        Utilities.post("/recordMostRecentClient", { mostRecentClient: new Date().toUTCString() })
+        Server.Post("/recordMostRecentClient", { mostRecentClient: new Date().toUTCString() })
     }
 
     render() {
@@ -39,7 +39,7 @@ export default class MainView extends React.Component<MainViewProps> {
             >
                 <img
                     className={"logo"}
-                    src={"/images/logo.png"}
+                    src={src("logo.png")}
                     style={{ animation: `spin ${8 - (this.counter % 8)}s linear infinite` }}
                     onClick={action(() => this.counter++)}
                 />
