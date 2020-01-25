@@ -10,17 +10,15 @@ const content_path = resolve(__dirname, "../../src/index.html");
 
 
 async function initialize() {
-
-    const data = {
-        granola: true,
-        strawberries: true,
-        pineapple: true,
-        apple: false
-    };
     
     await Database.connect("NodeReactTypescriptStarter");
     await Database.clearCollections("store", "clientLog");
-    await Database.insert("store", data);
+    await Database.insert("store", {
+        hello: "world",
+        one_fish: "two_fish",
+        red_fish: "blue_fish",
+        json: true,
+    });
 
     const server = express();
     
