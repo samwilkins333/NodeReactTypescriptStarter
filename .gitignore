@@ -2,3 +2,4 @@ node_modules
 package-lock.json
 static/
 most_recent_client.txt
+.env

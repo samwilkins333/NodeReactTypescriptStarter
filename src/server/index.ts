@@ -2,7 +2,7 @@ import * as express from "express";
 import { resolve } from "path";
 import * as bodyParser from "body-parser";
 import { Database } from "./database";
-import { AppliedSessionAgent, Monitor, ServerWorker, Repl } from "resilient-server-session";
+import { AppliedSessionAgent, Monitor, ServerWorker } from "resilient-server-session";
 import { v4 } from "uuid";
 import { config } from "dotenv";
 
