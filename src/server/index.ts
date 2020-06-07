@@ -2,12 +2,15 @@ import * as express from "express";
 import { resolve } from "path";
 import * as bodyParser from "body-parser";
 import { Database } from "./database";
+import { AppliedSessionAgent, Monitor, ServerWorker, Repl } from "resilient-server-session";
+import { v4 } from "uuid";
+import { config } from "dotenv";
 
-const port = 1050;
+config();
+const port = 3000;
 
 const static_path = resolve(__dirname, "../../static");
 const content_path = resolve(__dirname, "../../src/index.html");
-
 
 async function initialize() {
     
@@ -30,12 +33,30 @@ async function initialize() {
     server.get("/", (_req, res) => res.redirect("/logo"));
     server.get("/logo", (_req, res) => res.sendFile(content_path));
     
-    server.post("/recordMostRecentClient", ({ body }, res) => {
-        Database.insert("clientLog", body);
+    server.post("/recordMostRecentClient", async ({ body }, res) => {
+        await Database.deleteMany("clientLog", {});
+        await Database.insert("clientLog", body);
         res.send();
     });
     
     server.listen(port, () => console.log(`Server listening on port ${port}...`));
 }
 
-initialize();
+class ProjectSessionAgent extends AppliedSessionAgent {
+    
+    protected initializeMonitor(monitor: Monitor) {
+        monitor.addReplCommand("hello", [], () => console.log("world!"));
+        return v4();
+    }
+    
+    protected initializeServerWorker() {
+        return ServerWorker.Create(initialize);
+    }
+
+}
+
+if (process.env.MONITORED === "true") {
+    new ProjectSessionAgent().launch();
+} else {
+    initialize();
+}

@@ -1,4 +1,4 @@
-import { MongoClient, Collection, Db, InsertOneWriteOpResult, InsertWriteOpResult, CollectionInsertManyOptions } from "mongodb";
+import { MongoClient, Collection, Db, InsertOneWriteOpResult, InsertWriteOpResult, CollectionInsertManyOptions, DeleteWriteOpResultObject, CommonOptions, FilterQuery } from "mongodb";
 
 export namespace Database {
 
@@ -43,8 +43,32 @@ export namespace Database {
         }
     }
 
+    export async function deleteOne(collection: string, filterQuery: FilterQuery<any>, options?: CommonOptions) {
+        const resolved = await getOrCreateCollection(collection);
+        return new Promise<DeleteWriteOpResultObject>((resolve, reject) => {
+            resolved.deleteOne(filterQuery, options || {}, (error, result) => {
+                error ? reject(error) : resolve(result);
+            });
+        }); 
+    }
+
+    export async function deleteMany(collection: string, filterQuery: FilterQuery<any>, options?: CommonOptions) {
+        const resolved = await getOrCreateCollection(collection);
+        return new Promise<DeleteWriteOpResultObject>((resolve, reject) => {
+            resolved.deleteMany(filterQuery, options || {}, (error, result) => {
+                error ? reject(error) : resolve(result);
+            });
+        }); 
+    }
+
+    export async function listCollections() {
+        return (await database.collections()).map(col => col.namespace.split(".")[1]);
+    }
+
     export async function clearCollections(...collections: string[]) {
-        return Promise.all(collections.map(collection => database.dropCollection(collection)));
+        const existing = await listCollections();
+        const resolved = collections.filter(requested => existing.includes(requested));
+        return Promise.all(resolved.map(collection => database.dropCollection(collection)));
     }
 
 }
