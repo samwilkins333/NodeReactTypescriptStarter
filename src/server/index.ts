@@ -5,6 +5,7 @@ import { Database } from "./database";
 import { AppliedSessionAgent, Monitor, ServerWorker } from "resilient-server-session";
 import { v4 } from "uuid";
 import { config } from "dotenv";
+import { ensureConnection } from "../../ngrok";
 
 config();
 const port = 3000;
@@ -39,7 +40,13 @@ async function initialize() {
         res.send();
     });
     
-    server.listen(port, () => console.log(`Server listening on port ${port}...`));
+    server.listen(port, async () => {
+        console.log(`Server listening on port ${port}...`);
+        const success = await ensureConnection((url: string) => console.log(`Ngrok listening at ${url}`));
+        if (!success) {
+            console.log("Unable to start ngrok.");
+        }
+    });
 }
 
 class ProjectSessionAgent extends AppliedSessionAgent {
